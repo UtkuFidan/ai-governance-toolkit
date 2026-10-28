@@ -1,0 +1,229 @@
+# Control library. Wording is original/paraphrased.
+# EU refs: Regulation (EU) 2024/1689 article numbers (checked against the official text).
+# iso42001: clause THEMES only (paraphrased, not ISO text); confirm numbering in the purchased standard.
+# nist: AI RMF 1.0 (NIST AI 100-1) function and category number, e.g. "GOVERN 1".
+# when: all | personal_data | vendor ; tiers: which EU tiers the control is expected for.
+# checks: automatic predicates evaluated on the register entry (see gap.py). No checks = manual evidence.
+controls:
+  - id: PRH-01
+    title: Screen for prohibited practices
+    objective: Confirm before build and at each material change that the use case is not one of the banned practices.
+    tiers: [prohibited, high-risk, limited-risk (transparency), minimal]
+    eu: ["Art 5"]
+    iso42001: ["Planning: risk and impact identification", "Operation: operational planning and control"]
+    nist: ["MAP 1"]
+    checks: [not_prohibited]
+    evidence: [Dated screening record signed by the system owner and compliance]
+
+  - id: GOV-01
+    title: Accountable owner and AI policy
+    objective: A named accountable role, an approved AI policy and defined responsibilities for each system.
+    tiers: [high-risk, limited-risk (transparency), minimal]
+    eu: ["Art 17"]
+    iso42001: ["Leadership: policy and roles", "Annex A topic: policies; internal organisation"]
+    nist: ["GOVERN 1", "GOVERN 2"]
+    checks: [owner_defined]
+    evidence: [Approved AI policy, RACI for the system]
+
+  - id: GOV-02
+    title: AI literacy and competence
+    objective: People who build, run or rely on the system have the skills and awareness for their role.
+    tiers: [high-risk, limited-risk (transparency), minimal]
+    eu: ["Art 4"]
+    iso42001: ["Support: competence and awareness"]
+    nist: ["GOVERN 2"]
+    checks: []
+    evidence: [Training records or role competence matrix for owners, reviewers and users]
+
+  - id: RSK-01
+    title: Risk management across the lifecycle
+    objective: Known and foreseeable risks are identified, rated, treated and re-reviewed.
+    tiers: [high-risk]
+    eu: ["Art 9"]
+    iso42001: ["Planning: risk assessment and treatment", "Operation: risk assessment and treatment"]
+    nist: ["MAP 5", "MANAGE 1"]
+    checks: []
+    evidence: [Risk register extract for the system, treatment decisions, last review date]
+
+  - id: RSK-02
+    title: Impact assessment on affected people
+    objective: Effects on individuals and groups, including fundamental rights where relevant, are assessed before use.
+    tiers: [high-risk]
+    eu: ["Art 27"]
+    iso42001: ["Planning and operation: AI system impact assessment", "Annex A topic: assessing impacts"]
+    nist: ["MAP 5"]
+    checks: []
+    evidence: [Impact assessment, sign-off, mitigation list. Art 27(1) names Annex III points 5(b) and 5(c) for deployers]
+
+  - id: DAT-01
+    title: Data governance and documentation
+    objective: Training, validation and test data are documented for origin, preparation, quality and suitability.
+    tiers: [high-risk, limited-risk (transparency), minimal]
+    eu: ["Art 10"]
+    iso42001: ["Annex A topic: data for AI systems"]
+    nist: ["MAP 4", "MEASURE 2"]
+    checks: [data_dictionary_present]
+    evidence: [Data dictionary, lineage note, data quality test results (see `ai-gov evidence`)]
+
+  - id: DAT-02
+    title: Personal-data minimisation and protection
+    objective: Personal data used by the system is justified, minimised and protected.
+    when: personal_data
+    tiers: [high-risk, limited-risk (transparency), minimal]
+    eu: []
+    iso42001: ["Annex A topic: data for AI systems", "Operation: impact assessment"]
+    nist: ["MEASURE 2"]
+    checks: []
+    evidence: [Record of processing entry, privacy review. Data-protection law (e.g. GDPR) is out of scope for this tool]
+
+  - id: DOC-01
+    title: Technical documentation and model card
+    objective: Design, intended purpose, limits and performance are documented well enough for an independent reviewer.
+    tiers: [high-risk, limited-risk (transparency), minimal]
+    eu: ["Art 11"]
+    iso42001: ["Support: documented information", "Annex A topic: AI system life cycle"]
+    nist: ["MAP 2", "GOVERN 1"]
+    checks: [documentation_exists]
+    evidence: [Model card or development document, validation report]
+
+  - id: LOG-01
+    title: Event logging and traceability
+    objective: Operation produces logs sufficient to reconstruct decisions and investigate incidents.
+    tiers: [high-risk]
+    eu: ["Art 12"]
+    iso42001: ["Annex A topic: AI system life cycle", "Operation: operational control"]
+    nist: ["MEASURE 3"]
+    checks: []
+    evidence: [Log schema, retention rule, sample of a reconstructed decision]
+
+  - id: TRN-01
+    title: Instructions and information for deployers and users
+    objective: Users receive the information needed to interpret outputs and use the system as intended.
+    tiers: [high-risk]
+    eu: ["Art 13"]
+    iso42001: ["Annex A topic: information for interested parties"]
+    nist: ["GOVERN 5", "MAP 3"]
+    checks: []
+    evidence: [Instructions for use, user guidance, known limitations statement]
+
+  - id: TRN-02
+    title: Disclosure of AI interaction and generated content
+    objective: People are told when they interact with AI or receive AI-generated content, where the Regulation requires it.
+    tiers: [limited-risk (transparency)]
+    eu: ["Art 50"]
+    iso42001: ["Annex A topic: information for interested parties"]
+    nist: ["GOVERN 5", "MAP 3"]
+    checks: []
+    evidence: [Screenshots of the disclosure, marking or labelling approach for generated content]
+
+  - id: HUM-01
+    title: Effective human oversight
+    objective: A competent person can understand, question, override or stop the system's output.
+    tiers: [high-risk, limited-risk (transparency)]
+    eu: ["Art 14", "Art 26"]
+    iso42001: ["Annex A topic: use of AI systems", "Operation: operational control"]
+    nist: ["GOVERN 3", "MANAGE 1"]
+    checks: [oversight_defined, oversight_can_override]
+    evidence: [Oversight procedure, reviewer training, override statistics]
+
+  - id: VAL-01
+    title: Validation before use and periodically
+    objective: Performance and robustness are tested independently of development and repeated at a set interval.
+    tiers: [high-risk, limited-risk (transparency), minimal]
+    eu: ["Art 9", "Art 15", "Art 17"]
+    iso42001: ["Operation: verification and validation", "Performance evaluation: monitoring and measurement"]
+    nist: ["MEASURE 1", "MEASURE 2"]
+    checks: [validated_within_12_months]
+    evidence: [Validation report with date, scope, results and open findings]
+
+  - id: VAL-02
+    title: Independent validation
+    objective: Someone outside the build team validates the system.
+    tiers: [high-risk]
+    eu: []
+    iso42001: ["Performance evaluation: internal audit"]
+    nist: ["MEASURE 1"]
+    checks: [independent_validation]
+    evidence: [Validator independence statement, validation report]
+
+  - id: FAI-01
+    title: Bias and fairness testing
+    objective: Outcomes are compared across relevant groups or proxies, and differences are explained or corrected.
+    tiers: [high-risk]
+    eu: ["Art 10"]  # Art 10(2)(f) and (g): bias examination and mitigation; 10(5) on special-category data
+    iso42001: ["Annex A topic: assessing impacts", "Annex A topic: data for AI systems"]
+    nist: ["MEASURE 2", "MAP 5"]
+    checks: []
+    evidence: [Group metrics (demographic parity, equal opportunity) and a decision on tolerances (see `ai-gov evidence`)]
+
+  - id: XAI-01
+    title: Explainability of outputs
+    objective: Reasons for an output can be given to reviewers and, where required, to affected persons.
+    tiers: [high-risk]
+    eu: ["Art 13", "Art 86"]
+    iso42001: ["Annex A topic: information for interested parties"]
+    nist: ["MEASURE 2"]
+    checks: []
+    evidence: [Global drivers, per-case reason codes, reviewer feedback (see `ai-gov evidence`)]
+
+  - id: SEC-01
+    title: Accuracy, robustness and security
+    objective: The system performs as declared, resists misuse and failure, and is protected from tampering.
+    tiers: [high-risk]
+    eu: ["Art 15"]
+    iso42001: ["Annex A topic: AI system life cycle", "Operation: operational control"]
+    nist: ["MEASURE 2", "MANAGE 2"]
+    checks: []
+    evidence: [Robustness tests, access control review, model artefact integrity checks]
+
+  - id: MON-01
+    title: Performance monitoring with thresholds
+    objective: Live performance and input drift are monitored against defined limits that trigger action.
+    when: production
+    tiers: [high-risk, limited-risk (transparency), minimal]
+    eu: ["Art 72"]
+    iso42001: ["Performance evaluation: monitoring and measurement"]
+    nist: ["MEASURE 3", "MANAGE 4"]
+    checks: [monitoring_defined, thresholds_defined]
+    evidence: [Monitoring dashboard export, threshold table, last two monitoring reports (see `ai-gov evidence`)]
+
+  - id: INC-01
+    title: Incident handling and escalation
+    objective: Incidents are logged, triaged, escalated and closed with lessons recorded.
+    tiers: [high-risk, limited-risk (transparency), minimal]
+    eu: ["Art 73"]
+    iso42001: ["Improvement: nonconformity and corrective action"]
+    nist: ["MANAGE 4"]
+    checks: [no_open_incidents]
+    evidence: [Incident log, escalation procedure. Art 73 serious-incident reporting concerns providers of high-risk systems]
+
+  - id: THP-01
+    title: Third-party and vendor oversight
+    objective: Vendor models are covered by due diligence, contractual information rights and ongoing review.
+    when: vendor
+    tiers: [high-risk, limited-risk (transparency), minimal]
+    eu: ["Art 13", "Art 26"]
+    iso42001: ["Annex A topic: third-party and customer relationships"]
+    nist: ["GOVERN 6", "MANAGE 3"]
+    checks: [vendor_documentation]
+    evidence: [Due-diligence file, contract clauses on documentation and incident notice, vendor validation evidence]
+
+  - id: CHG-01
+    title: Change and version control
+    objective: Model, data and configuration changes are approved, tested and traceable.
+    tiers: [high-risk]
+    eu: ["Art 17"]
+    iso42001: ["Operation: operational planning and control", "Annex A topic: AI system life cycle"]
+    nist: ["MANAGE 1"]
+    checks: []
+    evidence: [Change log, approval records, model registry entry]
+
+  - id: AUD-01
+    title: Internal audit and management review
+    objective: The AI management system and its high-risk systems are audited and reviewed by management on a cycle.
+    tiers: [high-risk]
+    eu: []
+    iso42001: ["Performance evaluation: internal audit; management review"]
+    nist: ["GOVERN 1"]
+    checks: []
+    evidence: [Audit plan covering the system, last management review minutes]

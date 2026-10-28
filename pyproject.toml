@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ai-governance-toolkit"
+version = "0.1.0"
+description = "AI system inventory, EU AI Act risk triage, control gap assessment and technical audit evidence checks"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [{ name = "Utku Fidan" }]
+dependencies = [
+  "pydantic>=2.6",
+  "pyyaml>=6",
+  "numpy>=1.26",
+  "pandas>=2.2",
+  "scikit-learn>=1.4",
+]
+
+[project.optional-dependencies]
+data = ["xlrd>=2.0"]
+dev = ["pytest>=8", "ruff>=0.5", "fairlearn>=0.10"]
+
+[project.scripts]
+ai-gov = "ai_gov.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+ai_gov = ["data/*.yaml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["E501"]  # long literal strings in rule tables and HTML templates

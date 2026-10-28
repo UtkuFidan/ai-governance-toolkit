@@ -1,0 +1,19 @@
+name: ci
+on:
+  push:
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[dev]"
+      - run: ruff check .
+      - run: ruff format --check .
+      - run: pytest -q
+      # Offline: tests use synthetic data only; the UCI download is never triggered in CI.
+      - run: ai-gov inventory validate
+      - run: ai-gov timeline --as-of 2026-10-28

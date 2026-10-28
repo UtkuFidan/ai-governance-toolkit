@@ -1,0 +1,357 @@
+# ILLUSTRATIVE inventory. Every system, owner role, date, incident and answer below is invented
+# for demonstration. Nothing here describes a real organisation or a real production system.
+disclaimer: >-
+  Illustrative example data only. Entries are generic descriptions modelled on public portfolio
+  projects and common industry use cases. Not a real register, not legal advice.
+systems:
+  - id: AI-001
+    name: Explainable card-fraud scoring (gradient-boosted trees)
+    status: production
+    owner: Head of Fraud Analytics
+    purpose: Rank card transactions by fraud risk and attach a reason code to each flag for investigators.
+    users: [Fraud investigators, Fraud model owners]
+    affected_persons: Card holders whose transactions are flagged
+    data_categories: [transactional, customer_profile]
+    model_type: XGBoost classifier with TreeSHAP reason codes
+    provenance: in_house
+    deployment: on_prem
+    human_oversight:
+      mode: human_in_the_loop
+      description: An investigator reviews every flag before a card is blocked.
+      can_override: true
+    monitoring:
+      frequency: monthly
+      metrics: [PR-AUC, recall at review budget, PSI of score, alert volume]
+      thresholds_defined: true
+      last_review: 2026-09-30
+    last_validation: 2026-03-12
+    independent_validation: true
+    documentation: [model card, validation report, threshold and cost memo, data dictionary]
+    incidents: []
+    related_project: explainable-fraud-detection
+    questionnaire:
+      annex_iii_use_case: "5(b)"
+      used_only_for_fraud_detection: true
+      role: provider_and_deployer
+
+  - id: AI-002
+    name: Retail credit scorecard
+    status: production
+    owner: Head of Retail Credit Risk
+    purpose: Score consumer loan applicants to support approve, refer or decline decisions.
+    users: [Credit underwriters, Credit risk]
+    affected_persons: Consumer loan applicants
+    data_categories: [customer_profile, financial_personal, transactional]
+    model_type: Logistic regression scorecard with WoE binning
+    provenance: in_house
+    deployment: on_prem
+    human_oversight:
+      mode: human_on_the_loop
+      description: Auto-decisions inside the cut-off band; manual review for referred cases.
+      can_override: true
+    monitoring:
+      frequency: quarterly
+      metrics: [Gini, KS, PSI of score, population stability by segment]
+      thresholds_defined: true
+      last_review: 2026-07-15
+    last_validation: 2025-06-30
+    independent_validation: true
+    documentation: [model development document, validation report]
+    incidents:
+      - date: 2026-02-09
+        severity: medium
+        summary: Score cut-off configured with a stale parameter file for two days; corrected and back-tested.
+        resolved: true
+    related_project: credit-model-audit-checks
+    questionnaire:
+      annex_iii_use_case: "5(b)"
+      performs_profiling_of_natural_persons: true
+      role: provider_and_deployer
+
+  - id: AI-003
+    name: Transaction-monitoring alert prioritisation
+    status: production
+    owner: Head of Financial Crime Analytics
+    purpose: Rank anti-money-laundering alerts so investigators work the highest-risk cases first.
+    users: [AML investigators]
+    affected_persons: Customers whose accounts generate alerts
+    data_categories: [transactional, customer_profile]
+    model_type: Gradient-boosted trees on top of rule-based scenarios
+    provenance: in_house
+    deployment: on_prem
+    human_oversight:
+      mode: human_in_the_loop
+      description: Model only orders the queue; every alert is closed or escalated by an analyst.
+      can_override: true
+    monitoring:
+      frequency: monthly
+      metrics: [alert precision, SAR conversion, PSI of score, queue age]
+      thresholds_defined: true
+      last_review: 2026-10-05
+    last_validation: 2026-01-20
+    independent_validation: true
+    documentation: [model card, validation report, tuning memo]
+    incidents: []
+    related_project: transaction-monitoring-models
+    questionnaire:
+      performs_profiling_of_natural_persons: true
+      role: provider_and_deployer
+
+  - id: AI-004
+    name: Sanctions name-screening match ranker
+    status: production
+    owner: Head of Sanctions Compliance
+    purpose: Rank fuzzy name matches against sanctions lists to cut false positives for analysts.
+    users: [Sanctions analysts]
+    affected_persons: Customers and counterparties screened
+    data_categories: [personal_identifiers]
+    model_type: Fuzzy string matching with a learned re-ranker
+    provenance: open_source
+    vendor_or_source: Open-source string-matching libraries, in-house re-ranker
+    deployment: on_prem
+    human_oversight:
+      mode: human_in_the_loop
+      description: Analyst disposes every potential match; model never auto-clears.
+      can_override: true
+    monitoring:
+      frequency: quarterly
+      metrics: [recall on seeded true matches, false-positive rate]
+      thresholds_defined: false
+      last_review: 2026-04-02
+    last_validation: 2025-09-15
+    independent_validation: false
+    documentation: [design note]
+    incidents: []
+    related_project: sanctions-name-screening
+    questionnaire:
+      role: provider_and_deployer
+
+  - id: AI-005
+    name: Local-LLM RAG assistant for regulations
+    status: pilot
+    owner: Head of Audit Analytics
+    purpose: Answer questions about regulation text with citations to the retrieved passages.
+    users: [Internal audit team]
+    affected_persons: Staff using answers in work papers
+    data_categories: [public_text, internal_documents]
+    model_type: Open-weight LLM with retrieval-augmented generation
+    provenance: open_source
+    vendor_or_source: Open-weight model run locally; model licence tracked in the model card
+    deployment: local_workstation
+    human_oversight:
+      mode: human_in_the_loop
+      description: User must open the cited passage before relying on an answer.
+      can_override: true
+    monitoring:
+      frequency: per release
+      metrics: [citation accuracy on a fixed question set, refusal rate]
+      thresholds_defined: true
+      last_review: 2026-08-05
+    last_validation: 2026-08-05
+    independent_validation: false
+    documentation: [model card, evaluation set description]
+    incidents:
+      - date: 2026-05-18
+        severity: low
+        summary: Answer cited a passage that did not support the claim; caught by the reader before use.
+        resolved: true
+    related_project: local-llm-audit-assistant
+    questionnaire:
+      interacts_directly_with_natural_persons: true
+      generates_synthetic_content: true
+      role: provider_and_deployer
+
+  - id: AI-006
+    name: Customer churn and uplift model
+    status: production
+    owner: Head of Customer Analytics
+    purpose: Predict churn and estimate which customers respond to a retention offer.
+    users: [Marketing analysts]
+    affected_persons: Retail customers selected or not selected for offers
+    data_categories: [customer_profile, transactional]
+    model_type: Gradient-boosted churn model plus uplift (two-model approach)
+    provenance: in_house
+    deployment: private_cloud
+    human_oversight:
+      mode: none
+      description: Campaign lists are produced automatically from the score.
+      can_override: false
+    monitoring:
+      frequency: quarterly
+      metrics: [AUC, uplift at top decile]
+      thresholds_defined: false
+      last_review: 2026-06-20
+    last_validation: 2025-12-02
+    independent_validation: false
+    documentation: [notebook README]
+    incidents: []
+    related_project: customer-churn-and-acquisition
+    questionnaire:
+      performs_profiling_of_natural_persons: true
+      role: provider_and_deployer
+
+  - id: AI-007
+    name: Energy consumption forecasting
+    status: production
+    owner: Head of Facilities Analytics
+    purpose: Forecast building electricity demand to plan purchasing and spot anomalies.
+    users: [Facilities team]
+    affected_persons: None directly
+    data_categories: [sensor_telemetry]
+    model_type: Gradient-boosted regression with calendar and weather features
+    provenance: in_house
+    deployment: private_cloud
+    human_oversight:
+      mode: human_on_the_loop
+      description: Analyst reviews the forecast and anomaly list weekly.
+      can_override: true
+    monitoring:
+      frequency: monthly
+      metrics: [MAPE, PSI of residuals]
+      thresholds_defined: true
+      last_review: 2026-10-01
+    last_validation: 2026-04-28
+    independent_validation: false
+    documentation: [model card, data dictionary]
+    incidents: []
+    related_project: energy-consumption-analytics
+    questionnaire:
+      role: provider_and_deployer
+
+  - id: AI-008
+    name: Motor insurance pricing and claims frequency model
+    status: production
+    owner: Head of Pricing
+    purpose: Estimate claim frequency and severity to set motor premiums.
+    users: [Pricing actuaries]
+    affected_persons: Motor policyholders and applicants
+    data_categories: [customer_profile, financial_personal, transactional]
+    model_type: Generalised linear model with gradient-boosted challenger
+    provenance: in_house
+    deployment: on_prem
+    human_oversight:
+      mode: human_on_the_loop
+      description: Pricing committee approves rate changes; no per-customer manual review.
+      can_override: true
+    monitoring:
+      frequency: quarterly
+      metrics: [loss ratio by segment, lift chart, PSI of rating factors]
+      thresholds_defined: true
+      last_review: 2026-07-30
+    last_validation: 2026-05-10
+    independent_validation: true
+    documentation: [actuarial memo, validation report, data dictionary]
+    incidents: []
+    related_project: insurance-pricing-and-claims
+    questionnaire:
+      performs_profiling_of_natural_persons: true
+      role: provider_and_deployer
+
+  - id: AI-009
+    name: Life and health insurance risk-pricing model (pilot)
+    status: pilot
+    owner: Head of Life Underwriting
+    purpose: Estimate individual mortality and morbidity risk to propose life and health premiums.
+    users: [Underwriters]
+    affected_persons: Life and health insurance applicants
+    data_categories: [customer_profile, special_category, financial_personal]
+    model_type: Survival model with gradient-boosted features
+    provenance: in_house
+    deployment: private_cloud
+    human_oversight:
+      mode: post_hoc_sampling
+      description: A 5 percent sample of quotes is reviewed after issue.
+      can_override: false
+    monitoring:
+      frequency: none
+      metrics: []
+      thresholds_defined: false
+    incidents: []
+    questionnaire:
+      annex_iii_use_case: "5(c)"
+      performs_profiling_of_natural_persons: true
+      role: provider_and_deployer
+
+  - id: AI-010
+    name: Vendor CV-screening tool
+    status: production
+    owner: Head of HR Operations
+    purpose: Rank incoming job applications for recruiter review.
+    users: [Recruiters]
+    affected_persons: Job applicants
+    data_categories: [personal_identifiers, customer_profile]
+    model_type: Vendor-supplied ranking model (opaque)
+    provenance: vendor
+    vendor_or_source: Illustrative HR-tech vendor (fictional)
+    deployment: vendor_saas
+    human_oversight:
+      mode: none
+      description: Recruiters see the top 20 only; rejected applications are not reviewed.
+      can_override: false
+    monitoring:
+      frequency: none
+      metrics: []
+      thresholds_defined: false
+    last_validation: 2024-11-10
+    independent_validation: false
+    documentation: [vendor brochure]
+    incidents:
+      - date: 2026-03-03
+        severity: high
+        summary: Complaint that applicants with career breaks were consistently ranked low; no root cause available from vendor.
+        resolved: false
+    questionnaire:
+      annex_iii_use_case: "4(a)"
+      performs_profiling_of_natural_persons: true
+      role: deployer
+
+  - id: AI-011
+    name: Vendor customer-service chatbot
+    status: production
+    owner: Head of Customer Service
+    purpose: Answer routine customer questions on the website and hand over to an agent when needed.
+    users: [Customers, Service agents]
+    affected_persons: Customers contacting the service
+    data_categories: [customer_profile, public_text]
+    model_type: Vendor-hosted large language model with a knowledge base
+    provenance: vendor
+    vendor_or_source: Illustrative conversational-AI vendor (fictional)
+    deployment: vendor_saas
+    human_oversight:
+      mode: human_on_the_loop
+      description: Hand-over to an agent on request or on low confidence; transcripts sampled weekly.
+      can_override: true
+    monitoring:
+      frequency: monthly
+      metrics: [containment rate, escalation rate, sampled accuracy]
+      thresholds_defined: true
+      last_review: 2026-09-12
+    last_validation: 2026-02-18
+    independent_validation: false
+    documentation: [vendor security report, acceptance test log]
+    incidents: []
+    questionnaire:
+      interacts_directly_with_natural_persons: true
+      generates_synthetic_content: true
+      role: deployer
+
+  - id: AI-012
+    name: Customer social-behaviour scoring (rejected proposal)
+    status: rejected
+    owner: Head of Retail Marketing
+    purpose: Proposal to rate customers on lifestyle and social-media behaviour and apply the score to unrelated service decisions.
+    users: [Retail marketing]
+    affected_persons: Retail customers
+    data_categories: [customer_profile, personal_identifiers]
+    model_type: Behavioural scoring model (concept only)
+    provenance: in_house
+    deployment: private_cloud
+    human_oversight:
+      mode: none
+    monitoring:
+      frequency: none
+    incidents: []
+    questionnaire:
+      social_scoring: true
+      performs_profiling_of_natural_persons: true
+      role: provider_and_deployer

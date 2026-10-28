@@ -1,0 +1,49 @@
+# Failure-mode categories, hand-written by the author, mapped to the library controls that would
+# be expected to prevent or detect them. No text from the AI Incident Database is stored here.
+# keywords are used only to bucket a user-supplied snapshot (see `ai-gov incidents`).
+categories:
+  - id: bias
+    name: Discriminatory or unequal outcomes
+    keywords: [bias, discriminat, racial, gender, unfair, disparate, minority]
+    controls: [DAT-01, FAI-01, RSK-02, VAL-01, MON-01]
+    why: Group-level testing before release and during monitoring surfaces unequal error or selection rates; the impact assessment asks who could be harmed.
+  - id: drift
+    name: Performance degradation or model drift
+    keywords: [drift, degrad, outdated, stale, inaccurate, wrong prediction, misclassif, false positive, false negative]
+    controls: [VAL-01, MON-01, CHG-01]
+    why: Thresholded monitoring (for example PSI on score and inputs) and periodic revalidation catch a model that no longer matches its population.
+  - id: genai_error
+    name: Fabricated or misleading generative output
+    keywords: [hallucinat, chatbot, fabricat, misinformation, generated, language model, llm, deepfake, synthetic]
+    controls: [VAL-01, HUM-01, TRN-02, MON-01, TRN-01]
+    why: Sampled accuracy tests, citation checks, a human who verifies before reliance, and clear disclosure of AI-generated content.
+  - id: privacy
+    name: Privacy or data exposure
+    keywords: [privacy, leak, exposed, personal data, surveillance, facial recognition, biometric, scrap]
+    controls: [DAT-02, SEC-01, THP-01, PRH-01]
+    why: Data minimisation, access control and vendor due diligence reduce exposure; the prohibited-practice screen covers some biometric uses.
+  - id: no_oversight
+    name: Automated decision without effective human oversight
+    keywords: [automated, autonomous, no human, wrongful, arrest, denied, terminated, auto]
+    controls: [HUM-01, RSK-01, LOG-01, RSK-02]
+    why: A defined override path, risk assessment of the decision, and logs that allow an affected person's case to be reconstructed.
+  - id: security
+    name: Adversarial misuse or security failure
+    keywords: [adversarial, jailbreak, prompt injection, attack, malicious, fraud, scam, hack, poison]
+    controls: [SEC-01, MON-01, INC-01, CHG-01]
+    why: Robustness testing, monitoring for abnormal inputs and an incident process that can respond.
+  - id: vendor_opaque
+    name: Opaque third-party system
+    keywords: [vendor, third-party, proprietary, black box, opaque, procured]
+    controls: [THP-01, TRN-01, XAI-01, VAL-02]
+    why: Contract rights to documentation and incident notice, plus independent validation of what cannot be inspected.
+  - id: safety
+    name: Physical safety or critical-service failure
+    keywords: [crash, collision, injur, death, fatal, safety, vehicle, robot, outage]
+    controls: [RSK-01, SEC-01, HUM-01, LOG-01, INC-01]
+    why: Lifecycle risk management, fail-safe oversight and event logs that support investigation and reporting.
+  - id: weak_response
+    name: Slow or absent incident response
+    keywords: [ignored, delayed, complaint, failed to report, no response, cover]
+    controls: [INC-01, LOG-01, AUD-01, GOV-01]
+    why: A tested escalation path, accountable owner and audit follow-up make sure known problems are closed.

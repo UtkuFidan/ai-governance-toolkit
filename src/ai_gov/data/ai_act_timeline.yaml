@@ -1,0 +1,75 @@
+# Application dates of Regulation (EU) 2024/1689 (AI Act). Dates come from Art 113 of the original
+# text, as amended by Regulation (EU) 2026/1744 (the "Digital Omnibus on AI"). Only amendments that
+# are in force are applied; proposals and political agreements are not.
+# Dates last checked 2026-10-28.
+acts:
+  - id: base
+    title: Regulation (EU) 2024/1689 (AI Act)
+    url: https://eur-lex.europa.eu/eli/reg/2024/1689/oj
+    in_force: 2024-08-01
+  - id: omnibus
+    title: Regulation (EU) 2026/1744 amending Regulation (EU) 2024/1689 (Digital Omnibus on AI)
+    url: https://eur-lex.europa.eu/eli/reg/2026/1744/oj
+    published_oj: 2026-07-24
+    in_force: 2026-07-27
+    cited_by:
+      - https://ai-act-service-desk.ec.europa.eu/en/ai-act/timeline/timeline-implementation-eu-ai-act
+      - https://eprs.europarl.europa.eu/contents/publications/EPRS/2026/10/EPRS_ATA(2025)772906.html
+
+obligations:
+  - id: prohibitions
+    title: Prohibited AI practices
+    articles: ["5"]
+    original: 2025-02-02
+    current: 2025-02-02
+    basis: Art 113(a)
+  - id: ai_literacy
+    title: AI literacy
+    articles: ["4"]
+    original: 2025-02-02
+    current: 2025-02-02
+    basis: Art 113(a)
+    note: The Omnibus recast Art 4 as a duty to take measures to promote AI literacy; the date did not move.
+  - id: governance_penalties
+    title: Governance bodies, notified bodies, penalties (Chapters III s.4, VII, XII; Art 78)
+    articles: ["28-39", "64-70", "99-100", "78"]
+    original: 2025-08-02
+    current: 2025-08-02
+    basis: Art 113(b), except Art 101
+  - id: gpai
+    title: General-purpose AI model obligations (Chapter V)
+    articles: ["51-56"]
+    original: 2025-08-02
+    current: 2025-08-02
+    basis: Art 113(b)
+    note: Models placed on the market before 2 August 2025 have until 2 August 2027 (Art 111(3)).
+  - id: transparency
+    title: Transparency obligations (Art 50)
+    articles: ["50"]
+    original: 2026-08-02
+    current: 2026-08-02
+    basis: Art 113, general date
+  - id: transparency_marking_legacy
+    title: Art 50(2) machine-readable marking, generative systems already on the market before 2 August 2026
+    articles: ["50(2)"]
+    original: 2026-08-02
+    current: 2026-12-02
+    basis: Art 111, as inserted by Regulation (EU) 2026/1744
+  - id: prohibitions_added
+    title: Added prohibitions (non-consensual intimate imagery, child sexual abuse material)
+    articles: ["5(1)(ba)", "5(1)(bb)"]
+    original: null
+    current: 2026-12-02
+    basis: Regulation (EU) 2026/1744
+  - id: high_risk_annex_iii
+    title: High-risk systems under Annex III (Art 6(2)) and their requirements
+    articles: ["6(2)", "8-27", "43", "49", "72-73"]
+    original: 2026-08-02
+    current: 2027-12-02
+    basis: Art 113, as amended by Regulation (EU) 2026/1744
+  - id: high_risk_annex_i
+    title: High-risk systems that are products or safety components under Annex I (Art 6(1))
+    articles: ["6(1)", "8-27", "43", "49", "72-73"]
+    original: 2027-08-02
+    current: 2028-08-02
+    basis: Art 113(c), as amended by Regulation (EU) 2026/1744

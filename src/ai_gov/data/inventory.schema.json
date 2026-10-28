@@ -1,0 +1,429 @@
+{
+  "$defs": {
+    "AISystem": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^AI-\\d{3}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "illustrative": {
+          "default": true,
+          "title": "Illustrative",
+          "type": "boolean"
+        },
+        "status": {
+          "$ref": "#/$defs/Status"
+        },
+        "owner": {
+          "description": "Accountable role, never a named person",
+          "title": "Owner",
+          "type": "string"
+        },
+        "purpose": {
+          "title": "Purpose",
+          "type": "string"
+        },
+        "users": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Users",
+          "type": "array"
+        },
+        "affected_persons": {
+          "default": "",
+          "title": "Affected Persons",
+          "type": "string"
+        },
+        "data_categories": {
+          "items": {
+            "$ref": "#/$defs/DataCategory"
+          },
+          "minItems": 1,
+          "title": "Data Categories",
+          "type": "array"
+        },
+        "model_type": {
+          "title": "Model Type",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        },
+        "vendor_or_source": {
+          "default": "",
+          "title": "Vendor Or Source",
+          "type": "string"
+        },
+        "deployment": {
+          "$ref": "#/$defs/Deployment"
+        },
+        "human_oversight": {
+          "$ref": "#/$defs/Oversight"
+        },
+        "monitoring": {
+          "$ref": "#/$defs/Monitoring"
+        },
+        "last_validation": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Validation"
+        },
+        "independent_validation": {
+          "default": false,
+          "title": "Independent Validation",
+          "type": "boolean"
+        },
+        "documentation": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Documentation",
+          "type": "array"
+        },
+        "incidents": {
+          "items": {
+            "$ref": "#/$defs/Incident"
+          },
+          "title": "Incidents",
+          "type": "array"
+        },
+        "questionnaire": {
+          "$ref": "#/$defs/Questionnaire"
+        },
+        "related_project": {
+          "default": "",
+          "title": "Related Project",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "status",
+        "owner",
+        "purpose",
+        "users",
+        "data_categories",
+        "model_type",
+        "provenance",
+        "deployment",
+        "human_oversight",
+        "monitoring"
+      ],
+      "title": "AISystem",
+      "type": "object"
+    },
+    "DataCategory": {
+      "enum": [
+        "transactional",
+        "customer_profile",
+        "personal_identifiers",
+        "financial_personal",
+        "special_category",
+        "public_text",
+        "internal_documents",
+        "sensor_telemetry",
+        "synthetic"
+      ],
+      "title": "DataCategory",
+      "type": "string"
+    },
+    "Deployment": {
+      "enum": [
+        "on_prem",
+        "local_workstation",
+        "private_cloud",
+        "public_cloud",
+        "vendor_saas"
+      ],
+      "title": "Deployment",
+      "type": "string"
+    },
+    "Incident": {
+      "additionalProperties": false,
+      "properties": {
+        "date": {
+          "format": "date",
+          "title": "Date",
+          "type": "string"
+        },
+        "severity": {
+          "pattern": "^(low|medium|high)$",
+          "title": "Severity",
+          "type": "string"
+        },
+        "summary": {
+          "title": "Summary",
+          "type": "string"
+        },
+        "resolved": {
+          "default": true,
+          "title": "Resolved",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "date",
+        "severity",
+        "summary"
+      ],
+      "title": "Incident",
+      "type": "object"
+    },
+    "Monitoring": {
+      "additionalProperties": false,
+      "properties": {
+        "frequency": {
+          "description": "e.g. monthly, quarterly, none",
+          "title": "Frequency",
+          "type": "string"
+        },
+        "metrics": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Metrics",
+          "type": "array"
+        },
+        "thresholds_defined": {
+          "default": false,
+          "title": "Thresholds Defined",
+          "type": "boolean"
+        },
+        "last_review": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Review"
+        }
+      },
+      "required": [
+        "frequency"
+      ],
+      "title": "Monitoring",
+      "type": "object"
+    },
+    "Oversight": {
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "$ref": "#/$defs/OversightMode"
+        },
+        "description": {
+          "default": "",
+          "title": "Description",
+          "type": "string"
+        },
+        "can_override": {
+          "default": false,
+          "title": "Can Override",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "mode"
+      ],
+      "title": "Oversight",
+      "type": "object"
+    },
+    "OversightMode": {
+      "enum": [
+        "none",
+        "post_hoc_sampling",
+        "human_on_the_loop",
+        "human_in_the_loop"
+      ],
+      "title": "OversightMode",
+      "type": "string"
+    },
+    "Provenance": {
+      "enum": [
+        "in_house",
+        "open_source",
+        "vendor"
+      ],
+      "title": "Provenance",
+      "type": "string"
+    },
+    "Questionnaire": {
+      "additionalProperties": false,
+      "description": "Answers for the EU AI Act triage. Defaults mean 'no'.",
+      "properties": {
+        "subliminal_or_deceptive_manipulation": {
+          "default": false,
+          "title": "Subliminal Or Deceptive Manipulation",
+          "type": "boolean"
+        },
+        "exploits_vulnerabilities": {
+          "default": false,
+          "title": "Exploits Vulnerabilities",
+          "type": "boolean"
+        },
+        "social_scoring": {
+          "default": false,
+          "title": "Social Scoring",
+          "type": "boolean"
+        },
+        "crime_risk_by_profiling_only": {
+          "default": false,
+          "title": "Crime Risk By Profiling Only",
+          "type": "boolean"
+        },
+        "untargeted_face_scraping": {
+          "default": false,
+          "title": "Untargeted Face Scraping",
+          "type": "boolean"
+        },
+        "emotion_inference_work_or_education": {
+          "default": false,
+          "title": "Emotion Inference Work Or Education",
+          "type": "boolean"
+        },
+        "biometric_categorisation_sensitive": {
+          "default": false,
+          "title": "Biometric Categorisation Sensitive",
+          "type": "boolean"
+        },
+        "realtime_remote_biometric_id_law_enforcement": {
+          "default": false,
+          "title": "Realtime Remote Biometric Id Law Enforcement",
+          "type": "boolean"
+        },
+        "safety_component_of_annex_i_product": {
+          "default": false,
+          "title": "Safety Component Of Annex I Product",
+          "type": "boolean"
+        },
+        "third_party_conformity_assessment_required": {
+          "default": false,
+          "title": "Third Party Conformity Assessment Required",
+          "type": "boolean"
+        },
+        "annex_iii_use_case": {
+          "default": "",
+          "title": "Annex Iii Use Case",
+          "type": "string"
+        },
+        "used_only_for_fraud_detection": {
+          "default": false,
+          "title": "Used Only For Fraud Detection",
+          "type": "boolean"
+        },
+        "performs_profiling_of_natural_persons": {
+          "default": false,
+          "title": "Performs Profiling Of Natural Persons",
+          "type": "boolean"
+        },
+        "narrow_procedural_task": {
+          "default": false,
+          "title": "Narrow Procedural Task",
+          "type": "boolean"
+        },
+        "improves_prior_human_activity": {
+          "default": false,
+          "title": "Improves Prior Human Activity",
+          "type": "boolean"
+        },
+        "detects_patterns_without_replacing_human_review": {
+          "default": false,
+          "title": "Detects Patterns Without Replacing Human Review",
+          "type": "boolean"
+        },
+        "preparatory_task_only": {
+          "default": false,
+          "title": "Preparatory Task Only",
+          "type": "boolean"
+        },
+        "interacts_directly_with_natural_persons": {
+          "default": false,
+          "title": "Interacts Directly With Natural Persons",
+          "type": "boolean"
+        },
+        "generates_synthetic_content": {
+          "default": false,
+          "title": "Generates Synthetic Content",
+          "type": "boolean"
+        },
+        "emotion_recognition_or_biometric_categorisation": {
+          "default": false,
+          "title": "Emotion Recognition Or Biometric Categorisation",
+          "type": "boolean"
+        },
+        "generates_deepfake_content": {
+          "default": false,
+          "title": "Generates Deepfake Content",
+          "type": "boolean"
+        },
+        "role": {
+          "$ref": "#/$defs/Role",
+          "default": "deployer"
+        }
+      },
+      "title": "Questionnaire",
+      "type": "object"
+    },
+    "Role": {
+      "enum": [
+        "provider",
+        "deployer",
+        "provider_and_deployer"
+      ],
+      "title": "Role",
+      "type": "string"
+    },
+    "Status": {
+      "enum": [
+        "proposed",
+        "pilot",
+        "production",
+        "retired",
+        "rejected"
+      ],
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "disclaimer": {
+      "title": "Disclaimer",
+      "type": "string"
+    },
+    "systems": {
+      "items": {
+        "$ref": "#/$defs/AISystem"
+      },
+      "title": "Systems",
+      "type": "array"
+    }
+  },
+  "required": [
+    "disclaimer",
+    "systems"
+  ],
+  "title": "Inventory",
+  "type": "object"
+}

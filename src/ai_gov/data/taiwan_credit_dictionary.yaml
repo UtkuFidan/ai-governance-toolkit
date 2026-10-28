@@ -1,0 +1,233 @@
+# Data dictionary for UCI "Default of Credit Card Clients" (Yeh, 2009; UCI dataset 350, CC BY 4.0),
+# paraphrased from the variable list on the dataset page. The target column is renamed DEFAULT.
+# valid_values / valid_range encode what the dictionary documents; rows outside are reported by the check.
+ID:
+  description: Row identifier assigned in the published file
+  type: integer
+  personal_data: true
+  role: identifier
+LIMIT_BAL:
+  description: Amount of given credit in NT dollars, individual plus family/supplementary credit
+  type: integer
+  personal_data: true
+  role: feature
+  valid_range:
+  - 0
+  - 10000000
+SEX:
+  description: 'Gender: 1 = male, 2 = female'
+  type: categorical
+  personal_data: true
+  role: protected_attribute
+  valid_values:
+  - 1
+  - 2
+EDUCATION:
+  description: 'Education: 1 = graduate school, 2 = university, 3 = high school, 4 = others'
+  type: categorical
+  personal_data: true
+  role: feature
+  valid_values:
+  - 1
+  - 2
+  - 3
+  - 4
+MARRIAGE:
+  description: 'Marital status: 1 = married, 2 = single, 3 = others'
+  type: categorical
+  personal_data: true
+  role: feature
+  valid_values:
+  - 1
+  - 2
+  - 3
+AGE:
+  description: Age in years
+  type: integer
+  personal_data: true
+  role: feature_and_proxy
+  valid_range:
+  - 18
+  - 100
+PAY_0:
+  description: 'Repayment status in September 2005: -1 = paid duly, 1 to 8 = months of payment delay, 9 = nine months or more'
+  type: categorical
+  personal_data: true
+  role: feature
+  valid_values:
+  - -1
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+PAY_2:
+  description: 'Repayment status in August 2005: -1 = paid duly, 1 to 8 = months of payment delay, 9 = nine months or more'
+  type: categorical
+  personal_data: true
+  role: feature
+  valid_values:
+  - -1
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+PAY_3:
+  description: 'Repayment status in July 2005: -1 = paid duly, 1 to 8 = months of payment delay, 9 = nine months or more'
+  type: categorical
+  personal_data: true
+  role: feature
+  valid_values:
+  - -1
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+PAY_4:
+  description: 'Repayment status in June 2005: -1 = paid duly, 1 to 8 = months of payment delay, 9 = nine months or more'
+  type: categorical
+  personal_data: true
+  role: feature
+  valid_values:
+  - -1
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+PAY_5:
+  description: 'Repayment status in May 2005: -1 = paid duly, 1 to 8 = months of payment delay, 9 = nine months or more'
+  type: categorical
+  personal_data: true
+  role: feature
+  valid_values:
+  - -1
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+PAY_6:
+  description: 'Repayment status in April 2005: -1 = paid duly, 1 to 8 = months of payment delay, 9 = nine months or more'
+  type: categorical
+  personal_data: true
+  role: feature
+  valid_values:
+  - -1
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+BILL_AMT1:
+  description: Amount of bill statement in September 2005, NT dollars
+  type: integer
+  personal_data: true
+  role: feature
+BILL_AMT2:
+  description: Amount of bill statement in August 2005, NT dollars
+  type: integer
+  personal_data: true
+  role: feature
+BILL_AMT3:
+  description: Amount of bill statement in July 2005, NT dollars
+  type: integer
+  personal_data: true
+  role: feature
+BILL_AMT4:
+  description: Amount of bill statement in June 2005, NT dollars
+  type: integer
+  personal_data: true
+  role: feature
+BILL_AMT5:
+  description: Amount of bill statement in May 2005, NT dollars
+  type: integer
+  personal_data: true
+  role: feature
+BILL_AMT6:
+  description: Amount of bill statement in April 2005, NT dollars
+  type: integer
+  personal_data: true
+  role: feature
+PAY_AMT1:
+  description: Amount of previous payment made in August 2005, NT dollars
+  type: integer
+  personal_data: true
+  role: feature
+  valid_range:
+  - 0
+  - 10000000
+PAY_AMT2:
+  description: Amount of previous payment made in July 2005, NT dollars
+  type: integer
+  personal_data: true
+  role: feature
+  valid_range:
+  - 0
+  - 10000000
+PAY_AMT3:
+  description: Amount of previous payment made in June 2005, NT dollars
+  type: integer
+  personal_data: true
+  role: feature
+  valid_range:
+  - 0
+  - 10000000
+PAY_AMT4:
+  description: Amount of previous payment made in May 2005, NT dollars
+  type: integer
+  personal_data: true
+  role: feature
+  valid_range:
+  - 0
+  - 10000000
+PAY_AMT5:
+  description: Amount of previous payment made in April 2005, NT dollars
+  type: integer
+  personal_data: true
+  role: feature
+  valid_range:
+  - 0
+  - 10000000
+PAY_AMT6:
+  description: Amount of previous payment made in March 2005, NT dollars
+  type: integer
+  personal_data: true
+  role: feature
+  valid_range:
+  - 0
+  - 10000000
+DEFAULT:
+  description: 'Target: 1 = default payment next month (October 2005), 0 = no default'
+  type: binary
+  personal_data: true
+  role: target
+  valid_values:
+  - 0
+  - 1
