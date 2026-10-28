@@ -1,0 +1,479 @@
+{
+  "dataset": "UCI Default of Credit Card Clients (UCI 350), CC BY 4.0, Yeh (2009), DOI 10.24432/C55S3H",
+  "seed": 42,
+  "performance": {
+    "rows": 30000,
+    "default_rate": 0.2212,
+    "train_rows": 18000,
+    "validation_rows": 6000,
+    "test_rows": 6000,
+    "test_auc": 0.7859,
+    "test_auc_ci95": [
+      0.7713,
+      0.7996
+    ],
+    "threshold_from_validation_f1": 0.27,
+    "flag_rate_test": 0.2393,
+    "model": "HistGradientBoostingClassifier (scikit-learn), SEX excluded from features"
+  },
+  "checks": [
+    {
+      "check": "drift_psi: test vs train (random split baseline)",
+      "status": "pass",
+      "metrics": {
+        "score_psi": 0.0017,
+        "max_feature_psi": 0.0034,
+        "features_over_0.10": 0,
+        "features_over_0.25": 0
+      },
+      "thresholds": {
+        "warn_at": 0.1,
+        "fail_at": 0.25
+      },
+      "note": "PSI < 0.10 stable, 0.10 to 0.25 moderate shift, >= 0.25 significant shift (common convention).",
+      "details": [
+        {
+          "feature": "BILL_AMT6",
+          "psi": 0.0034
+        },
+        {
+          "feature": "AGE",
+          "psi": 0.0027
+        },
+        {
+          "feature": "BILL_AMT4",
+          "psi": 0.0021
+        },
+        {
+          "feature": "BILL_AMT2",
+          "psi": 0.0021
+        },
+        {
+          "feature": "BILL_AMT3",
+          "psi": 0.002
+        }
+      ]
+    },
+    {
+      "check": "drift_psi: simulated shift: customers aged 40+ vs train",
+      "status": "warn",
+      "metrics": {
+        "score_psi": 0.0081,
+        "max_feature_psi": 5.658,
+        "features_over_0.10": 2,
+        "features_over_0.25": 2
+      },
+      "thresholds": {
+        "warn_at": 0.1,
+        "fail_at": 0.25
+      },
+      "note": "PSI < 0.10 stable, 0.10 to 0.25 moderate shift, >= 0.25 significant shift (common convention).",
+      "details": [
+        {
+          "feature": "AGE",
+          "psi": 5.658
+        },
+        {
+          "feature": "MARRIAGE",
+          "psi": 0.3029
+        },
+        {
+          "feature": "EDUCATION",
+          "psi": 0.0851
+        },
+        {
+          "feature": "LIMIT_BAL",
+          "psi": 0.0132
+        },
+        {
+          "feature": "PAY_3",
+          "psi": 0.0109
+        }
+      ]
+    },
+    {
+      "check": "fairness: SEX",
+      "status": "pass",
+      "metrics": {
+        "demographic_parity_difference": 0.0323,
+        "equal_opportunity_difference": 0.0343,
+        "disparate_impact_ratio": 0.8753,
+        "selection_rate": {
+          "female": 0.2266,
+          "male": 0.2589
+        },
+        "true_positive_rate": {
+          "female": 0.5868,
+          "male": 0.5524
+        },
+        "group_sizes": {
+          "female": 3628,
+          "male": 2372
+        },
+        "ci95": {
+          "demographic_parity_difference": [
+            0.0099,
+            0.0524
+          ],
+          "equal_opportunity_difference": [
+            0.0018,
+            0.0867
+          ],
+          "disparate_impact_ratio": [
+            0.8056,
+            0.9595
+          ],
+          "bootstrap_resamples": 1000
+        }
+      },
+      "thresholds": {
+        "max_abs_difference": 0.1
+      },
+      "note": "'Positive' means predicted default (adverse). Differences are gaps in rates, not proof of discrimination; base rates differ between groups and the tolerance is illustrative. A point estimate inside the tolerance is reported as warn when its 95% bootstrap interval reaches beyond it.",
+      "details": []
+    },
+    {
+      "check": "fairness: AGE group (proxy)",
+      "status": "pass",
+      "metrics": {
+        "demographic_parity_difference": 0.0404,
+        "equal_opportunity_difference": 0.0162,
+        "disparate_impact_ratio": 0.8489,
+        "selection_rate": {
+          "40+": 0.2671,
+          "under 40": 0.2268
+        },
+        "true_positive_rate": {
+          "40+": 0.5824,
+          "under 40": 0.5663
+        },
+        "group_sizes": {
+          "40+": 1868,
+          "under 40": 4132
+        },
+        "ci95": {
+          "demographic_parity_difference": [
+            0.0164,
+            0.0641
+          ],
+          "equal_opportunity_difference": [
+            0.0009,
+            0.0726
+          ],
+          "disparate_impact_ratio": [
+            0.7746,
+            0.9346
+          ],
+          "bootstrap_resamples": 1000
+        }
+      },
+      "thresholds": {
+        "max_abs_difference": 0.1
+      },
+      "note": "'Positive' means predicted default (adverse). Differences are gaps in rates, not proof of discrimination; base rates differ between groups and the tolerance is illustrative. A point estimate inside the tolerance is reported as warn when its 95% bootstrap interval reaches beyond it.",
+      "details": []
+    },
+    {
+      "check": "fairness: intersectional SEX x AGE",
+      "status": "warn",
+      "metrics": {
+        "attributes": [
+          "SEX",
+          "AGE"
+        ],
+        "cells_total": 8,
+        "cells_included": 8,
+        "min_cell_size": 100,
+        "demographic_parity_difference": 0.1242,
+        "equal_opportunity_difference": 0.1302,
+        "disparate_impact_ratio": 0.5944,
+        "highest_selection_cell": "female|50+",
+        "lowest_selection_cell": "female|30-39",
+        "ci95": {
+          "demographic_parity_difference": [
+            0.0842,
+            0.1817
+          ],
+          "equal_opportunity_difference": [
+            0.1013,
+            0.2766
+          ],
+          "disparate_impact_ratio": [
+            0.4827,
+            0.701
+          ],
+          "bootstrap_resamples": 1000
+        }
+      },
+      "thresholds": {
+        "max_abs_difference": 0.1
+      },
+      "note": "Gaps are the maximum difference between cells, so they exceed single-attribute gaps by construction and with more cells the maximum drifts upward through noise alone. Read them together with the interval and the cell sizes.",
+      "details": [
+        {
+          "cell": "female|30-39",
+          "n": 1302,
+          "positives": 231,
+          "selection_rate": 0.182,
+          "selection_ci95": [
+            0.162,
+            0.2039
+          ],
+          "true_positive_rate": 0.5108,
+          "tpr_ci95": [
+            0.4467,
+            0.5746
+          ],
+          "included": true
+        },
+        {
+          "cell": "female|40-49",
+          "n": 722,
+          "positives": 171,
+          "selection_rate": 0.2493,
+          "selection_ci95": [
+            0.2191,
+            0.2821
+          ],
+          "true_positive_rate": 0.614,
+          "tpr_ci95": [
+            0.5393,
+            0.6837
+          ],
+          "included": true
+        },
+        {
+          "cell": "female|50+",
+          "n": 320,
+          "positives": 78,
+          "selection_rate": 0.3063,
+          "selection_ci95": [
+            0.2583,
+            0.3588
+          ],
+          "true_positive_rate": 0.641,
+          "tpr_ci95": [
+            0.5303,
+            0.7385
+          ],
+          "included": true
+        },
+        {
+          "cell": "female|<30",
+          "n": 1284,
+          "positives": 275,
+          "selection_rate": 0.2391,
+          "selection_ci95": [
+            0.2166,
+            0.2632
+          ],
+          "true_positive_rate": 0.6182,
+          "tpr_ci95": [
+            0.5595,
+            0.6736
+          ],
+          "included": true
+        },
+        {
+          "cell": "male|30-39",
+          "n": 904,
+          "positives": 208,
+          "selection_rate": 0.2423,
+          "selection_ci95": [
+            0.2155,
+            0.2712
+          ],
+          "true_positive_rate": 0.5529,
+          "tpr_ci95": [
+            0.485,
+            0.6189
+          ],
+          "included": true
+        },
+        {
+          "cell": "male|40-49",
+          "n": 574,
+          "positives": 147,
+          "selection_rate": 0.2648,
+          "selection_ci95": [
+            0.2304,
+            0.3024
+          ],
+          "true_positive_rate": 0.5374,
+          "tpr_ci95": [
+            0.4569,
+            0.616
+          ],
+          "included": true
+        },
+        {
+          "cell": "male|50+",
+          "n": 252,
+          "positives": 71,
+          "selection_rate": 0.2738,
+          "selection_ci95": [
+            0.2225,
+            0.332
+          ],
+          "true_positive_rate": 0.5352,
+          "tpr_ci95": [
+            0.4204,
+            0.6464
+          ],
+          "included": true
+        },
+        {
+          "cell": "male|<30",
+          "n": 642,
+          "positives": 146,
+          "selection_rate": 0.271,
+          "selection_ci95": [
+            0.2381,
+            0.3067
+          ],
+          "true_positive_rate": 0.5753,
+          "tpr_ci95": [
+            0.4942,
+            0.6526
+          ],
+          "included": true
+        }
+      ]
+    },
+    {
+      "check": "explainability_coverage",
+      "status": "pass",
+      "metrics": {
+        "features_total": 22,
+        "features_for_80pct_importance": 8,
+        "documented_importance_share": 1.0,
+        "top_features": [
+          {
+            "feature": "PAY_0",
+            "share": 0.4107
+          },
+          {
+            "feature": "LIMIT_BAL",
+            "share": 0.0996
+          },
+          {
+            "feature": "BILL_AMT1",
+            "share": 0.0796
+          },
+          {
+            "feature": "PAY_AMT3",
+            "share": 0.0681
+          },
+          {
+            "feature": "PAY_4",
+            "share": 0.0435
+          }
+        ],
+        "reason_code_share": 0.981
+      },
+      "thresholds": {
+        "min_documented_importance_share": 0.9,
+        "min_reason_code_share": 0.8
+      },
+      "note": "Importance is permutation-based (drop in AUC). Reason-code share uses single-feature occlusion to the training median; both are approximations to be confirmed with the model's own explanation method.",
+      "details": []
+    },
+    {
+      "check": "data_documentation_completeness",
+      "status": "warn",
+      "metrics": {
+        "columns": 25,
+        "column_coverage": 1.0,
+        "field_completeness": 1.0,
+        "columns_with_domain_check": 18,
+        "columns_with_values_outside_domain": 8,
+        "domain_conformity": 0.7764,
+        "missing_value_share": 0.0,
+        "duplicate_rows": 0,
+        "undocumented_columns": [],
+        "dictionary_entries_without_column": [],
+        "target_documented": true
+      },
+      "thresholds": {
+        "column_coverage": 1.0,
+        "field_completeness": 0.9,
+        "domain_conformity": "no rows outside documented values"
+      },
+      "note": "Fails when columns lack a dictionary entry or required fields are blank; warns when data holds values the dictionary does not define.",
+      "details": [
+        {
+          "column": "EDUCATION",
+          "rows_outside_domain": 345,
+          "share": 0.0115,
+          "undocumented_values": [
+            0,
+            5,
+            6
+          ]
+        },
+        {
+          "column": "MARRIAGE",
+          "rows_outside_domain": 54,
+          "share": 0.0018,
+          "undocumented_values": [
+            0
+          ]
+        },
+        {
+          "column": "PAY_0",
+          "rows_outside_domain": 17496,
+          "share": 0.5832,
+          "undocumented_values": [
+            -2,
+            0
+          ]
+        },
+        {
+          "column": "PAY_2",
+          "rows_outside_domain": 19512,
+          "share": 0.6504,
+          "undocumented_values": [
+            -2,
+            0
+          ]
+        },
+        {
+          "column": "PAY_3",
+          "rows_outside_domain": 19849,
+          "share": 0.6616,
+          "undocumented_values": [
+            -2,
+            0
+          ]
+        },
+        {
+          "column": "PAY_4",
+          "rows_outside_domain": 20803,
+          "share": 0.6934,
+          "undocumented_values": [
+            -2,
+            0
+          ]
+        },
+        {
+          "column": "PAY_5",
+          "rows_outside_domain": 21493,
+          "share": 0.7164,
+          "undocumented_values": [
+            -2,
+            0
+          ]
+        },
+        {
+          "column": "PAY_6",
+          "rows_outside_domain": 21181,
+          "share": 0.706,
+          "undocumented_values": [
+            -2,
+            0
+          ]
+        }
+      ]
+    }
+  ]
+}
